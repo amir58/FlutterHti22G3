@@ -10,18 +10,18 @@ class LoginScreen extends StatelessWidget {
         title: const Text("Login"),
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         width: double.infinity,
         child: Column(
           children: [
-            SizedBox(height: 15),
-            Text(
+            const SizedBox(height: 15),
+            const Text(
               "Login Screen",
               style: TextStyle(
                 fontSize: 33,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFormField(
@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                 prefixIcon: Icon(Icons.email),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFormField(
@@ -51,28 +51,31 @@ class LoginScreen extends StatelessWidget {
               alignment: AlignmentDirectional.centerEnd,
               child: TextButton(
                 onPressed: () {},
-                child: Text("Forget password?"),
+                child: const Text("Forget password?"),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Login"),
-                  ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Login"),
                 ),
-                SizedBox(width: 10,),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {},
-                    child: Text("Regitser"),
+                    child: const Text(
+                      "Regitser Regitser Regitser Regitser Regitser ",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],
             ),
-
           ],
         ),
       ),
