@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
 
 class MessengerScreen extends StatelessWidget {
-  const MessengerScreen({Key? key}) : super(key: key);
+  MessengerScreen({Key? key}) : super(key: key);
+
+  List<ChatData> chatsData = [
+    ChatData(
+      imageUrl:
+          "https://resources.premierleague.com/photos/2022/07/02/d296ae9f-b850-4c6c-9ffe-88ae5658a93a/GettyImages-1396813126.jpg?width=500&height=333",
+      username: "Amir",
+      message: "hello",
+      dateTime: "10 m",
+      online: false,
+      opened: false,
+    ),
+    ChatData(
+      imageUrl:
+          "https://resources.premierleague.com/photos/2022/07/02/d296ae9f-b850-4c6c-9ffe-88ae5658a93a/GettyImages-1396813126.jpg?width=500&height=333",
+      username: "Ali",
+      message: "Hi where are you",
+      dateTime: "now",
+      online: true,
+      opened: true,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +37,12 @@ class MessengerScreen extends StatelessWidget {
               buildCustomSearch(),
               buildStoriesRow(),
               Expanded(
-                child: ListView.builder(
-                  itemCount: 500,
-                  itemBuilder: (context, index) => buildChatItem(),
+                child: ListView.separated(
+                  itemCount: chatsData.length,
+                  itemBuilder: (context, index) => buildChatItem(index),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(color: Colors.black, height: 5);
+                  },
                 ),
               )
             ],
@@ -176,26 +200,25 @@ class MessengerScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem() {
+  Widget buildChatItem(int index) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           Stack(
             alignment: AlignmentDirectional.bottomEnd,
-            children: const [
+            children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(
-                    "https://resources.premierleague.com/photos/2022/07/02/d296ae9f-b850-4c6c-9ffe-88ae5658a93a/GettyImages-1396813126.jpg?width=500&height=333"),
+                backgroundImage: NetworkImage(chatsData[index].imageUrl),
               ),
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 12,
                 backgroundColor: Colors.white,
               ),
-              CircleAvatar(
+               CircleAvatar(
                 radius: 11,
-                backgroundColor: Colors.green,
+                backgroundColor: chatsData[index].online ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -204,23 +227,23 @@ class MessengerScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Mohammed Salah Ahmed Ali",
+                Text(
+                  chatsData[index].username,
                   maxLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                     color: Colors.black,
                   ),
                 ),
                 Row(
-                  children: const [
+                  children: [
                     Expanded(
                       child: Text(
-                        "Hello how are Hello how are Hello how are ",
+                        chatsData[index].message,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black,
@@ -228,8 +251,8 @@ class MessengerScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      " . now",
-                      style: TextStyle(
+                      " . ${chatsData[index].dateTime}",
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Colors.black,
@@ -242,12 +265,38 @@ class MessengerScreen extends StatelessWidget {
           ),
           // Spacer(),
           const SizedBox(width: 10),
-          const CircleAvatar(
-            backgroundColor: Colors.blue,
-            radius: 10,
+           Visibility(
+             visible: chatsData[index].opened ,
+             child: const CircleAvatar(
+              backgroundColor:Colors.blue,
+              radius: 10,
           ),
+           ),
+          // CircleAvatar(
+          //   backgroundColor:
+          //       chatsData[index].opened ? Colors.white : Colors.blue,
+          //   radius: 10,
+          // ),
         ],
       ),
     );
   }
+}
+
+class ChatData {
+  String imageUrl;
+  String username;
+  String message;
+  String dateTime;
+  bool online;
+  bool opened;
+
+  ChatData({
+    required this.imageUrl,
+    required this.username,
+    required this.message,
+    required this.dateTime,
+    required this.online,
+    required this.opened,
+  });
 }
