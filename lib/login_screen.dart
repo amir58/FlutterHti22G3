@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+   LoginScreen({Key? key}) : super(key: key);
+
+   var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -12,71 +14,99 @@ class LoginScreen extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.all(10),
         width: double.infinity,
-        child: Column(
-          children: [
-            const SizedBox(height: 15),
-            const Text(
-              "Login Screen",
-              style: TextStyle(
-                fontSize: 33,
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              const Text(
+                "Login Screen",
+                style: TextStyle(
+                  fontSize: 33,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+              const SizedBox(
+                height: 15,
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            TextFormField(
-              obscureText: true,
-              maxLength: 12,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                // border: InputBorder.none,
-                prefixIcon: Icon(Icons.lock),
-                suffixIcon: Icon(Icons.remove_red_eye),
+              TextFormField(
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Email required";
+                  }
+                  if(!value.contains("@") || !value.contains(".")){
+                    return "Email not valid";
+                  }
+
+                  return null;
+                },
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.email),
+                ),
               ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.centerEnd,
-              child: TextButton(
-                onPressed: () {},
-                child: const Text("Forget password?"),
+              const SizedBox(
+                height: 15,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
+              TextFormField(
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Password required";
+                  }
+                  return null;
+                },
+                obscureText: true,
+                maxLength: 12,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  // border: InputBorder.none,
+                  prefixIcon: Icon(Icons.lock),
+                  suffixIcon: Icon(Icons.remove_red_eye),
+                ),
+              ),
+              Container(
+                alignment: AlignmentDirectional.centerEnd,
+                child: TextButton(
                   onPressed: () {},
-                  child: const Text("Login"),
+                  child: const Text("Forget password?"),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Regitser Regitser Regitser Regitser Regitser ",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if(formKey.currentState!.validate()){
+                          print('Validate');
+                        }
+                        else{
+                          print('Not valid');
+                        }
+                      },
+                      child: const Text("Login"),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Regitser ",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

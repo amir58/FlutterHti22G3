@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hti22three/widgets/app_circle_icon_button.dart';
 
 class MessengerScreen extends StatelessWidget {
   MessengerScreen({Key? key}) : super(key: key);
@@ -86,24 +87,20 @@ class MessengerScreen extends StatelessWidget {
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 33),
         ),
         const Spacer(),
-        buildAppBarIcons(Icons.camera_alt_rounded),
-        const SizedBox(width: 5),
-        buildAppBarIcons(Icons.edit),
-      ],
-    );
-  }
-
-  Widget buildAppBarIcons(IconData icon) {
-    return CircleAvatar(
-      radius: 20,
-      backgroundColor: Colors.grey[300],
-      child: IconButton(
-        onPressed: () {},
-        icon: Icon(
-          icon,
-          color: Colors.black,
+        MyCircleIconButton(
+          icon: Icons.camera_alt_rounded,
+          onPressed: () {
+            print('Camera');
+          },
         ),
-      ),
+        const SizedBox(width: 5),
+        MyCircleIconButton(
+          icon: Icons.edit,
+          onPressed: () {
+            print('Edit');
+          },
+        ),
+      ],
     );
   }
 
@@ -216,9 +213,10 @@ class MessengerScreen extends StatelessWidget {
                 radius: 12,
                 backgroundColor: Colors.white,
               ),
-               CircleAvatar(
+              CircleAvatar(
                 radius: 11,
-                backgroundColor: chatsData[index].online ? Colors.green : Colors.red,
+                backgroundColor:
+                    chatsData[index].online ? Colors.green : Colors.red,
               ),
             ],
           ),
@@ -265,13 +263,13 @@ class MessengerScreen extends StatelessWidget {
           ),
           // Spacer(),
           const SizedBox(width: 10),
-           Visibility(
-             visible: chatsData[index].opened ,
-             child: const CircleAvatar(
-              backgroundColor:Colors.blue,
+          Visibility(
+            visible: chatsData[index].opened,
+            child: const CircleAvatar(
+              backgroundColor: Colors.blue,
               radius: 10,
+            ),
           ),
-           ),
           // CircleAvatar(
           //   backgroundColor:
           //       chatsData[index].opened ? Colors.white : Colors.blue,
