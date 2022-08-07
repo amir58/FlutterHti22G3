@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-   LoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  LoginScreen({Key? key}) : super(key: key);
 
-   var formKey = GlobalKey<FormState>();
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  var formKey = GlobalKey<FormState>();
+
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                   if (value!.isEmpty) {
                     return "Email required";
                   }
-                  if(!value.contains("@") || !value.contains(".")){
+                  if (!value.contains("@") || !value.contains(".")) {
                     return "Email not valid";
                   }
 
@@ -57,14 +64,22 @@ class LoginScreen extends StatelessWidget {
                   }
                   return null;
                 },
-                obscureText: true,
+                obscureText: obscureText,
                 maxLength: 12,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   // border: InputBorder.none,
-                  prefixIcon: Icon(Icons.lock),
-                  suffixIcon: Icon(Icons.remove_red_eye),
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      obscureText = !obscureText;
+                      setState((){});
+                    },
+                    icon: Icon(
+                      obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
                 ),
               ),
               Container(
@@ -80,10 +95,9 @@ class LoginScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if(formKey.currentState!.validate()){
+                        if (formKey.currentState!.validate()) {
                           print('Validate');
-                        }
-                        else{
+                        } else {
                           print('Not valid');
                         }
                       },

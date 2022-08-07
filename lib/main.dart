@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hti22three/assets.dart';
 import 'package:hti22three/bmi/bmi_screen.dart';
-import 'package:hti22three/contacts_screen.dart';
+import 'package:hti22three/contacts/contacts_screen.dart';
+import 'package:hti22three/contacts/main_contacts_screen.dart';
 import 'package:hti22three/first_screen.dart';
 import 'package:hti22three/login_screen.dart';
 import 'package:hti22three/messenger_screen.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      home: MainContactsScreen(),
     );
   }
 }
