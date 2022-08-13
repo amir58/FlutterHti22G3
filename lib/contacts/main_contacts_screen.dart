@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hti22three/contacts/contacts_cubit.dart';
 import 'package:hti22three/contacts/contacts_screen.dart';
 import 'package:hti22three/contacts/favorites_screen.dart';
 import 'package:sqflite/sqflite.dart';
 
-Database? database;
 
 class MainContactsScreen extends StatefulWidget {
   const MainContactsScreen({Key? key}) : super(key: key);
@@ -19,55 +20,10 @@ class _MainContactsScreenState extends State<MainContactsScreen> {
   @override
   void initState() {
     super.initState();
-
-    createDatabase();
+    context.read<ContactsCubit>().createDatabase();
   }
 
 
-  Future<void> createDatabase() async {
-    // open the database
-    database = await openDatabase("contacts", version: 1,
-        onCreate: (Database db, int version) async {
-      // When creating the db, create the table
-      await db.execute(
-          'CREATE TABLE Contacts (id INTEGER PRIMARY KEY, name TEXT, phone TEXT, favorite INTEGER)');
-      print('Create');
-    }, onOpen: (database) {
-      print('OPENED');
-    });
-
-  }
-
-  void insertContact({required String name, required String phone}) async {
-    // Insert some records in a transaction
-    await database?.transaction((txn) async {
-      int id1 = await txn.rawInsert(
-          'INSERT INTO Contacts(name, phone, favorite) VALUES("$name", "$phone", 0)');
-
-      print('inserted1: $id1');
-    });
-  }
-
-  void getContacts() async {
-    List<Map>? list = await database?.rawQuery('SELECT * FROM Contacts');
-
-    print("List => $list");
-    setState((){});
-  }
-
-  void updateContact({
-    required int favorite,
-    required int id,
-  }) {
-    database?.rawUpdate(
-        'UPDATE Contacts SET favorite = ? WHERE id = ?', ['$favorite', '$id']);
-  }
-
-  void deleteContact({required int id}) async {
-    int? count =
-        await database?.rawDelete('DELETE FROM Contacts WHERE id = ?', ['$id']);
-    assert(count == 1);
-  }
 
   // Database
   List<String> titles = ["Contacts", "Favorites"];
@@ -113,7 +69,8 @@ class _MainContactsScreenState extends State<MainContactsScreen> {
                 String name = nameController.text;
                 String phone = phoneController.text;
 
-                insertContact(name: name, phone: phone);
+                context.read<ContactsCubit>()
+                    .insertContact(name: name, phone: phone);
 
                 nameController.clear();
                 phoneController.clear();

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hti22three/contacts/contacts_cubit.dart';
+import 'package:hti22three/contacts/contacts_states.dart';
 
 import 'main_contacts_screen.dart';
 
@@ -12,28 +15,9 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
-  List<Map>? list = [];
-
-  void getContacts() async {
-    list = await database?.rawQuery('SELECT * FROM Contacts');
-
-    print("List => $list");
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
-    if (database == null) {
-      // Timer.periodic(Duration(seconds: 1), (timer) { });
-
-      Future.delayed(
-        const Duration(seconds: 1),
-        () {
-          getContacts();
-        },
-      );
-    }
   }
 
   // final List<MyContact> myContacts = [];
@@ -41,43 +25,79 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: list?.length,
-        itemBuilder: (context, index) {
-          print('ListView index => $index');
-          return Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(20)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        list![index]['name'],
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+      body: BlocBuilder<ContactsCubit, ContactsStates>(
+        buildWhen: (previous, current) => current is GetContactsState,
+        builder: (context, state) {
+          print('Contacts State => $state');
+          return ListView.builder(
+            itemCount: context.read<ContactsCubit>().contacts.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.read<ContactsCubit>().contacts[index]
+                                ['name'],
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            context.read<ContactsCubit>().contacts[index]
+                                ['phone'],
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        list![index]['phone'],
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          context.read<ContactsCubit>().updateContact(
+                                favorite: context
+                                            .read<ContactsCubit>()
+                                            .contacts[index]['favorite'] ==
+                                        0
+                                    ? 1
+                                    : 0,
+                                id: context
+                                    .read<ContactsCubit>()
+                                    .contacts[index]['id'],
+                              );
+                        },
+                        icon: Icon(context.read<ContactsCubit>().contacts[index]
+                                    ['favorite'] ==
+                                0
+                            ? Icons.favorite_border
+                            : Icons.favorite)),
+                    IconButton(
+                        onPressed: () {
+                          context.read<ContactsCubit>().deleteContact(
+                                id: context
+                                    .read<ContactsCubit>()
+                                    .contacts[index]['id'],
+                              );
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ))
+                  ],
                 ),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.favorite_border))
-              ],
-            ),
+              );
+            },
           );
         },
       ),
