@@ -18,6 +18,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<ContactsCubit>().getContacts();
   }
 
   // final List<MyContact> myContacts = [];
@@ -30,7 +31,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
         builder: (context, state) {
           print('Contacts State => $state');
           return ListView.builder(
-            itemCount: context.read<ContactsCubit>().contacts.length,
+            itemCount: state is GetContactsState ? state.contacts.length : 0,
             itemBuilder: (context, index) {
               return Container(
                 margin: const EdgeInsets.all(10),

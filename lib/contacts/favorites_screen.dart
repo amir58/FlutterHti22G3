@@ -14,6 +14,12 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
+  void initState() {
+    super.initState();
+    context.read<ContactsCubit>().getFavorites();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<ContactsCubit, ContactsStates>(
